@@ -1,0 +1,22 @@
+---
+const base = import.meta.env.BASE_URL;
+const indicadores = ['Estudantes', 'Rotas', 'Instituições', 'Bairros'];
+---
+
+<section id="dados" class="split dados" aria-labelledby="titulo-dados">
+  <div class="split-visual">
+    <h2 id="titulo-dados">Dados do<br /> transporte</h2>
+    <img src={`${base}imagens/3/indicadores.webp`} alt="" width="600" height="315" loading="lazy" />
+  </div>
+  <div class="split-content">
+    <dl class="indicators">
+      {indicadores.map((nome) => (
+        <div class="indicator">
+          <dt>{nome}</dt>
+          <dd aria-label="Em atualização">—</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="indicators-note">Indicadores do piloto em atualização.</p>
+  </div>
+</section>

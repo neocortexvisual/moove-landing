@@ -1,0 +1,40 @@
+---
+import './projeto.css';
+
+const { appUrl } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<section id="projeto" class="projeto" aria-labelledby="titulo-projeto">
+  <div class="hero">
+    <div class="hero-content">
+      <h1 id="titulo-projeto">O transporte universitário de Coruripe, no seu celular.</h1>
+      <p class="hero-description">Consulte o mapa, acesse sua carteirinha e registre sua presença.</p>
+      <a class="hero-cta" href={appUrl || '#recursos'}>Veja como funciona <span aria-hidden="true">↓</span></a>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <img
+        class="hero-image"
+        src={`${base}imagens/1/ae0062b9-5894-491a-a75c-4f420d4b8e2e.png`}
+        alt=""
+        width="1672"
+        height="941"
+        fetchpriority="high"
+      />
+      <canvas class="hero-shader" data-fractal-haze></canvas>
+      <span class="wordmark hero-wordmark">{Array.from('moove', (letter) => (
+        <span class="hero-letter">{letter}</span>
+      ))}</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { mountFractalHaze } from './fractal-haze.js';
+
+  for (const canvas of document.querySelectorAll<HTMLCanvasElement>('[data-fractal-haze]')) {
+    const hero = canvas.closest('.hero');
+    if (hero instanceof HTMLElement) mountFractalHaze(canvas, hero);
+  }
+</script>

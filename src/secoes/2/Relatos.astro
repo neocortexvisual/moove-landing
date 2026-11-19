@@ -1,0 +1,15 @@
+---
+import Carrossel from './Carrossel.jsx';
+
+const { relatosUrl } = Astro.props;
+---
+
+<section id="relatos" class="relatos tinted" aria-labelledby="titulo-relatos">
+  <p class="eyebrow">Relatos dos estudantes</p>
+  <h2 id="titulo-relatos">Como está o transporte na sua rota?</h2>
+  <Carrossel client:load />
+  <p class="relatos-prompt">Conte o que aconteceu ou sugira uma mudança.</p>
+  {relatosUrl
+    ? <a class="button" href={relatosUrl}>Enviar um relato</a>
+    : <button type="button" class="button" data-open-dialog="relato-dialog">Enviar um relato</button>}
+</section>

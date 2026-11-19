@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import Projeto from '../secoes/1/Projeto.astro';
+import Recursos from '../secoes/1.1/Recursos.astro';
+import Relatos from '../secoes/2/Relatos.astro';
+import Dados from '../secoes/3/Dados.astro';
+import Sobre from '../secoes/4/Sobre.astro';
+
+const appUrl = import.meta.env.PUBLIC_MOOVE_APP_URL;
+const relatosUrl = import.meta.env.PUBLIC_MOOVE_RELATOS_URL;
+const contatoUrl = import.meta.env.PUBLIC_MOOVE_CONTATO_URL;
+const instagramUrl = import.meta.env.PUBLIC_MOOVE_INSTAGRAM_URL;
+const privacidadeUrl = import.meta.env.PUBLIC_MOOVE_PRIVACIDADE_URL;
+
+const footerLinks = [
+  { label: 'Contato', url: contatoUrl, id: 'contato-dialog' },
+  { label: 'Instagram', url: instagramUrl, id: 'instagram-dialog' },
+  { label: 'Privacidade', url: privacidadeUrl, id: 'privacidade-dialog' },
+];
+const dialogs = [
+  { id: 'app-dialog', active: !appUrl, title: 'Acessar o app', description: 'O link de acesso ao aplicativo ainda não está disponível nesta página.' },
+  { id: 'relato-dialog', active: !relatosUrl, title: 'Enviar um relato', description: 'O canal para receber relatos ainda não está disponível nesta página.' },
+  { id: 'contato-dialog', active: !contatoUrl, title: 'Falar com a equipe', description: 'O contato da equipe ainda não está disponível nesta página.' },
+  { id: 'instagram-dialog', active: !instagramUrl, title: 'Instagram', description: 'O perfil do projeto ainda não está disponível nesta página.' },
+  { id: 'privacidade-dialog', active: !privacidadeUrl, title: 'Privacidade', description: 'Esta landing page não solicita dados pessoais.' },
+];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Conheça o Moove, um aplicativo para o transporte estudantil de Coruripe, Alagoas." />
+    <meta name="theme-color" content="#fefefe" />
+    <title>Moove · Transporte estudantil de Coruripe</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <div class="site">
+      <header id="inicio" class="site-header">
+        <nav class="main-nav" aria-label="Navegação principal">
+          <a href="#projeto">Projeto</a>
+          <a href="#relatos">Relatos</a>
+          <a href="#dados">Dados</a>
+          <a href="#sobre">Sobre nós</a>
+          {appUrl
+            ? <a href={appUrl}>Acessar o app</a>
+            : <button type="button" data-open-dialog="app-dialog">Acessar o app</button>}
+        </nav>
+      </header>
+
+      <main id="conteudo">
+        <Projeto appUrl={appUrl} />
+        <Recursos />
+        <Relatos relatosUrl={relatosUrl} />
+        <Dados />
+        <Sobre contatoUrl={contatoUrl} />
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-brand">
+          <a class="wordmark" href="#inicio" aria-label="Moove, voltar ao início">moove</a>
+          <span>Coruripe, Alagoas</span>
+        </div>
+        <nav class="footer-nav" aria-label="Links do rodapé">
+          {footerLinks.map(({ label, url, id }) => url
+            ? <a href={url}>{label}</a>
+            : <button type="button" data-open-dialog={id}>{label}</button>)}
+        </nav>
+      </footer>
+    </div>
+
+    {dialogs.filter(({ active }) => active).map(({ id, title, description }) => (
+      <dialog id={id} aria-labelledby={`${id}-title`}>
+        <h2 id={`${id}-title`}>{title}</h2>
+        <p>{description}</p>
+        <form method="dialog">
+          <button class="button" type="submit" autofocus>Fechar</button>
+        </form>
+      </dialog>
+    ))}
+
+    <script>
+      for (const trigger of document.querySelectorAll<HTMLButtonElement>('[data-open-dialog]')) {
+        const dialog = document.getElementById(trigger.dataset.openDialog ?? '');
+        if (dialog instanceof HTMLDialogElement) {
+          trigger.addEventListener('click', () => dialog.showModal());
+        }
+      }
+    </script>
+  </body>
+</html>
